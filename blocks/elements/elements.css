@@ -10,5 +10,4 @@
   display: grid;
   gap: 20px 18px;
   grid-template-columns: repeat(auto-fit, 282px);
-
 }
