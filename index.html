@@ -11,13 +11,15 @@
   <div class="content">
     <header class="header">
       <img src="./images/logo.png" alt="Логотип" class="header__logo">
-      <div class="header__line"></div>
+
     </header>
     <section class="profile">
       <img src="./images/profile__photo.png" alt="" class="profile__photo">
       <div class="profile__info">
-        <h1 class="profile__name">Жак-Ив Кусто<button class="profile__edit-btn"><img src="./images/profile__edit.svg" alt="" class="profile__edit-img"></button>
-        </h1>
+        <div>
+          <h1 class="profile__name">Жак-Ив Кусто</h1>
+          <button class="profile__edit-btn"><img src="./images/profile__edit.svg" alt="" class="profile__edit-img"></button>
+        </div>
         <p class="profile__status">Исследователь океана</p>
       </div>
       <button class="profile__add-btn"><img src="./images/profile__add.svg" alt="" class="profile__add-img"></button>
@@ -26,54 +28,63 @@
     <ul class="elements">
       <!-- (div.element>img.elements__image+div.elements__caption>h2.elements__title+img.elements__like)*6 -->
       <li class="elements__element">
-        <img src="./images/elements__kamchatka.jpg" alt="" class="elements__image">
+        <img src="./images/elements__kamchatka.jpg" alt="Камчатка" class="elements__image">
         <div class="elements__caption">
-          <h2 class="elements__title">Подпись</h2>
+          <h2 class="elements__title">Ключевская сопка</h2>
           <img src="./images/elements__like.svg" alt="Жми лайк" class="elements__like">
         </div>
       </li>
       <li class="elements__element">
-        <img src="./images/elements__kamchatka.jpg" alt="" class="elements__image">
+        <img src="./images/elements__moscow.jpg" alt="Москва" class="elements__image">
         <div class="elements__caption">
-          <h2 class="elements__title">Подпись</h2>
+          <h2 class="elements__title">Москва</h2>
           <img src="./images/elements__like.svg" alt="Жми лайк" class="elements__like">
         </div>
       </li>
       <li class="elements__element">
-        <img src="./images/elements__kamchatka.jpg" alt="" class="elements__image">
+        <img src="./images/elements__spb.jpg" alt="СПб" class="elements__image">
         <div class="elements__caption">
-          <h2 class="elements__title">Подпись</h2>
+          <h2 class="elements__title">Санкт-Петербург</h2>
           <img src="./images/elements__like.svg" alt="Жми лайк" class="elements__like">
         </div>
       </li>
       <li class="elements__element">
-        <img src="./images/elements__kamchatka.jpg" alt="" class="elements__image">
+        <img src="./images/elements__baikal.jpg" alt="Байкал" class="elements__image">
         <div class="elements__caption">
-          <h2 class="elements__title">Подпись</h2>
+          <h2 class="elements__title">Байкал</h2>
           <img src="./images/elements__like.svg" alt="Жми лайк" class="elements__like">
         </div>
       </li>
       <li class="elements__element">
-        <img src="./images/elements__kamchatka.jpg" alt="" class="elements__image">
+        <img src="./images/elements__vladivostok.jpg" alt="Владивосток" class="elements__image">
         <div class="elements__caption">
-          <h2 class="elements__title">Подпись</h2>
+          <h2 class="elements__title">Владивосток</h2>
           <img src="./images/elements__like.svg" alt="Жми лайк" class="elements__like">
         </div>
       </li>
       <li class="elements__element">
-        <img src="./images/elements__kamchatka.jpg" alt="" class="elements__image">
+        <img src="./images/elements__elbrus.jpg" alt="Эльбрус" class="elements__image">
         <div class="elements__caption">
-          <h2 class="elements__title">Подпись</h2>
+          <h2 class="elements__title">Эльбрус</h2>
           <img src="./images/elements__like.svg" alt="Жми лайк" class="elements__like">
         </div>
       </li>
-    </гд>
-
+    </ul>
     <footer class="footer">
       <p class="footer__copyright">
         &copy; 2020 Mesto Russia
       </p>
     </footer>
+    <div class="popup">
+      <form class="popup__container">
+        <h2 class="popup__heading">Редактировать профиль</h2>
+        <input type="text" name="name"    id="popup__input_field_name"   class="popup__input popup__input_field_name">
+        <input type="text" name="status"  id="popup__input_field_status" class="popup__input popup__input_field_status">
+        <button type = "submit" value=""  id="popup__input_button_save" class="popup__save">Сохранить</button>
+        <img src="./images/popup__close.svg" alt="Закрыть" class="popup__close">
+      </form>
+    </div>
   </div>
+<script src="./scripts/script.js"></script>
 </body>
 </html>

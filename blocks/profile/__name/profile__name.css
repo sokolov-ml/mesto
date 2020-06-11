@@ -1,6 +1,7 @@
 
 
 .profile__name {
+  display: inline;
   font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   font-style: normal;
   font-weight: 500;
@@ -8,6 +9,8 @@
   line-height: 56px;
   color: white;
   margin: 0;
+
+
 }
 
 
