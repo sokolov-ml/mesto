@@ -7,6 +7,12 @@
 
   color: #FFFFFF;
   margin: 0;
+
+  min-width: 282px;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 

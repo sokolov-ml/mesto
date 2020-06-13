@@ -2,11 +2,19 @@
   position: absolute;
   top: -35px;
   right: -35px;
-
+  padding: 0;
   width: 40px;
   height: 40px;
 
+  border: none;
+  background-color: unset;
+  background-position: center;
+  background-size: contain;
+
+  background-image: url(../../../images/popup__close.svg);
   transform: rotate(45deg);
+
+  transition: all 0.3s ease-out;
 
 }
 
