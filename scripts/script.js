@@ -27,48 +27,71 @@ const initialCards = [
 ];
 
 
-const popup = document.querySelector('.popup');
 
-const popup__container = document.querySelector('.popup__container');
+const formEditProfile = document.querySelector('.popup__container_edit-profile');
+const formAddCard = document.querySelector('.popup__container_add-card');
+
+
 const nameInput = document.querySelector('.popup__input_field_name');
 const jobInput  = document.querySelector('.popup__input_field_status');
-const btnPopupClose = document.querySelector('.popup__close');
 
 const profileName = document.querySelector('.profile__name');
 const profileStatus  = document.querySelector('.profile__status');
+
 const btnProfileEdit = document.querySelector('.profile__edit-btn');
+const btnAddCard = document.querySelector('.profile__add-btn');
 
-const cardsContainer = document.querySelector('.elements');
-/*
-В практической работе есть два требования:
-- DOM-элементы, к которым есть обращение в скрипте, вынесены в константы.
-- Переменные объявлены через let.
-У меня объекты (выше) в константах, а "обычных" переменных нет вообще. Поэтому без let
-*/
 
-function openPopupEdit() {
+// Универсальное открытие формы
+function openPopup(popup) {
   popup.classList.add('popup_opened');
-  // В описании к работе тут предполагают сохранить значения со страницы в переменные,
-  // а потом уже их присваивать в поля для ввода. Не вижу в этом смысла
-  nameInput.value = profileName.textContent;
-  jobInput.value = profileStatus.textContent;
 }
 
-function closePopupEdit() {
+// Универсальное закрытие формы
+const btnPopupCloseList = document.querySelectorAll('.popup__close');
+
+function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-function formSubmitHandler (evt) {
-    evt.preventDefault();
+btnPopupCloseList.forEach(function(btnPopupClose) {
+  btnPopupClose.addEventListener('click',function(evt) {
+    closePopup(evt.target.closest('.popup'));
+  })
+});
 
-    profileName.textContent = nameInput.value;
-    profileStatus.textContent = jobInput.value;
-    closePopupEdit();
-}
+// Форма добавления карточки
+btnAddCard.addEventListener('click',function() {
+  openPopup(document.querySelector('.popup_add-card'));
+});
 
-btnProfileEdit.addEventListener('click',openPopupEdit);
-btnPopupClose.addEventListener('click',closePopupEdit);
-popup__container.addEventListener('submit', formSubmitHandler);
+formAddCard.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+
+  addCard(document.querySelector('.popup__input_field_location').value, document.querySelector('.popup__input_field_image').value);
+  document.querySelector('.popup__input_field_location').value = '';
+  document.querySelector('.popup__input_field_image').value = '';
+  closePopup(evt.target.closest('.popup'));
+});
+
+// Форма редактирования профиля
+btnProfileEdit.addEventListener('click',function() {
+  openPopup(document.querySelector('.popup_edit-profile'));
+  nameInput.value = profileName.textContent;
+  jobInput.value = profileStatus.textContent;
+});
+
+formEditProfile.addEventListener('submit', function (evt) {
+  evt.preventDefault();
+  profileName.textContent = nameInput.value;
+  profileStatus.textContent = jobInput.value;
+  closePopup(evt.target.closest('.popup'));
+});
+
+
+
+// Добавление карточек:
+const cardsContainer = document.querySelector('.elements');
 
 function addCard(title, image) {
   const cardTemplate = document.querySelector('#card-template').content;
@@ -76,9 +99,7 @@ function addCard(title, image) {
   newCard.querySelector('.elements__image').src = image;
   newCard.querySelector('.elements__image').alt = title;
   newCard.querySelector('.elements__title').textContent  = title;
-
-  cardsContainer.append(newCard);
+  cardsContainer.prepend(newCard);
 }
-
 
 initialCards.forEach(item => addCard(item.name, item.link));
