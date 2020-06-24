@@ -6,7 +6,7 @@
   border: none;
   padding: 0;
   background-color: unset;
-  background: url(https://code.s3.yandex.net/web-code/dom/heart.svg) center no-repeat;
+  background: url(../../../images/heart.svg) center no-repeat;
   background-size: 100%;
   cursor: pointer;
 
