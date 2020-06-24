@@ -1,7 +1,7 @@
 .popup__close {
   position: absolute;
-  top: -35px;
-  right: -35px;
+  top: -40px;
+  right: 0;
   padding: 0;
   width: 40px;
   height: 40px;
@@ -27,11 +27,15 @@
 
 @media screen and (max-width: 500px) {
   .popup__close {
-    top: 20px;
+    /* top: 20px;
     right: 20px;
     width: 25px;
     height: 25px;
-    filter: invert();
+    filter: invert(); */
+    width: 30px;
+    height: 30px;
+    top: -30px;
+    right: 10px;
   }
 
 }

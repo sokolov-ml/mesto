@@ -19,3 +19,12 @@
   cursor: pointer;
   background: rgba(0, 0, 0, 0.8);
 }
+
+@media screen and (max-width: 500px) {
+  .popup__save {
+    font-size: 14px;
+    line-height: 17px;
+    min-height: 40px;
+  }
+
+}
