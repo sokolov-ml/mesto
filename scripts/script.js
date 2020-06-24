@@ -42,6 +42,9 @@ const btnProfileEdit = document.querySelector('.profile__edit-btn');
 const btnAddCard = document.querySelector('.profile__add-btn');
 
 
+
+
+
 // Универсальное открытие формы
 function openPopup(popup) {
   popup.classList.add('popup_opened');
@@ -99,6 +102,12 @@ function addCard(title, image) {
   newCard.querySelector('.elements__image').src = image;
   newCard.querySelector('.elements__image').alt = title;
   newCard.querySelector('.elements__title').textContent  = title;
+
+  newCard.querySelector('.elements__like').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('elements__like_active');
+  });
+
+
   cardsContainer.prepend(newCard);
 }
 

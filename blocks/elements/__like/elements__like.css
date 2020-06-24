@@ -1,13 +1,18 @@
+
+
 .elements__like {
   width: 21px;
   height: 19px;
   border: none;
   padding: 0;
-  background-repeat: no-repeat;
+
   background-color: unset;
-  background-position: center;
-  background-size: contain;
-  background-image: url(../../../images/elements__like.svg);
+
+
+
+  background: url(https://code.s3.yandex.net/web-code/dom/heart.svg) center no-repeat;
+  background-size: 100%;
+  cursor: pointer;
 
 }
 
