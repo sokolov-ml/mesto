@@ -26,11 +26,8 @@ const initialCards = [
   }
 ];
 
-
-
 const formEditProfile = document.querySelector('.popup__form_edit-profile');
 const formAddCard = document.querySelector('.popup__form_add-card');
-
 
 const nameInput = document.querySelector('.popup__input_field_name');
 const jobInput  = document.querySelector('.popup__input_field_status');
@@ -40,10 +37,6 @@ const profileStatus  = document.querySelector('.profile__status');
 
 const btnProfileEdit = document.querySelector('.profile__edit-btn');
 const btnAddCard = document.querySelector('.profile__add-btn');
-
-
-
-
 
 // Универсальное открытие формы
 function openPopup(popup) {

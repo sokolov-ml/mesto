@@ -43,13 +43,13 @@
         &copy; 2020 Mesto Russia
       </p>
     </footer>
-    <div class="popup popup_edit-profile">
 
+    <div class="popup popup_edit-profile">
       <div class="popup__container">
         <button type = "button" class="popup__close"></button>
         <form class="popup__form popup__form_edit-profile" name="edit-profile">
           <h2 class="popup__heading">Редактировать профиль</h2>
-          <input type="text" name="name"  class="popup__input popup__input_field_name">
+          <input type="text" name="name"  class="popup__input popup__input_field_name" required>
           <input type="text" name="status" class="popup__input popup__input_field_status">
           <button type = "submit" class="popup__save">Сохранить</button>
         </form>
@@ -60,14 +60,13 @@
         <button type = "button" class="popup__close"></button>
         <form class="popup__form popup__form_add-card" name="add-card">
           <h2 class="popup__heading">Новое место</h2>
-          <input type="text" name="name" placeholder="Название" class="popup__input popup__input_field_location">
-          <input type="text" name="status" placeholder="Ссылка на картинку" class="popup__input popup__input_field_image">
+          <input type="text" name="name" placeholder="Название" class="popup__input popup__input_field_location" required>
+          <input type="text" name="status" placeholder="Ссылка на картинку" class="popup__input popup__input_field_image" required>
           <button type = "submit" class="popup__save">Создать</button>
         </form>
       </div>
     </div>
     <div class="popup popup_show-image">
-
       <div class="popup__container">
         <button type = "button" class="popup__close"></button>
         <figure class="popup__figure">
