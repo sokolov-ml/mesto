@@ -56,6 +56,22 @@ btnPopupCloseList.forEach(function(btnPopupClose) {
   })
 });
 
+document.querySelectorAll('.popup').forEach(function(popup) {
+  popup.addEventListener('click',function(evt) {
+    if (evt.target.classList.contains('popup') ) {
+      closePopup(evt.target.closest('.popup'));
+    }
+  })
+});
+
+document.addEventListener('keydown', function(event) {
+  const key = event.key; // const {key} = event; in ES6+
+  if (key === "Escape" && document.querySelector('.popup_opened')) {
+    closePopup(document.querySelector('.popup_opened'));
+  }
+});
+
+
 // Форма добавления карточки
 btnAddCard.addEventListener('click',function() {
   openPopup(document.querySelector('.popup_add-card'));
