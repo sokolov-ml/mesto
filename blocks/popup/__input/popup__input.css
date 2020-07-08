@@ -6,9 +6,21 @@
   line-height: 26px;
   color: black;
 
+  width: 100%;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);;
+  display: block;
+  box-sizing: border-box;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+
+
+
 }
+
+.popup__input:invalid {
+  border-bottom: 1px solid red; /* красная рамка для некорректных данных */
+}
+
 
 @media screen and (max-width: 500px) {
   .popup__input {
@@ -17,3 +29,4 @@
   }
 
 }
+

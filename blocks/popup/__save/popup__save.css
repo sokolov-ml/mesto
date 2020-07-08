@@ -1,9 +1,11 @@
+
 .popup__save {
   min-height: 50px;
+  box-sizing: border-box;
+
   border:   none;
   background: rgb(0, 0, 0);
   border-radius: 2px;
-
 
   font-family: 'Inter', 'Arial', 'Helvetica', sans-serif;
   font-style: normal;
@@ -18,6 +20,14 @@
 .popup__save:hover {
   cursor: pointer;
   background: rgba(0, 0, 0, 0.8);
+}
+
+.popup__save:disabled {
+  opacity: 0.2;
+  background: none;
+  border: 1px solid #000000;
+  color: black;
+  pointer-events: none;
 }
 
 @media screen and (max-width: 500px) {
