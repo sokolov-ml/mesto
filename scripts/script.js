@@ -53,6 +53,7 @@ btnProfileEdit.addEventListener('click',function() {
   const popup = document.querySelector('.popup_edit-profile');
   nameInput.value = profileName.textContent;
   jobInput.value = profileStatus.textContent;
+  validateForm(popup);
   openPopup(popup);
 });
 
@@ -60,6 +61,7 @@ const btnAddCard = document.querySelector('.profile__add-btn');
 btnAddCard.addEventListener('click',function() {
   const popup = document.querySelector('.popup_add-card');
   popup.querySelector('.popup__form').reset();
+  validateForm(popup);
   openPopup(popup);
 });
 
@@ -91,7 +93,6 @@ document.addEventListener('keydown', function(event) {
 
 // Универсальное открытие формы
 function openPopup(popup) {
-  validateForm(popup);
   popup.classList.add('popup_opened');
 }
 
