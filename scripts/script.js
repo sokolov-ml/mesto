@@ -153,7 +153,7 @@ function setFormsEventListeners() {
 setFormsEventListeners();
 
 function hasInvalidInput(inputList) {
-  return inputList.some((inputElement) => {
+  return Array.from(inputList).some((inputElement) => {
     return !inputElement.validity.valid
   });
 }
@@ -169,12 +169,12 @@ function toggleButtonState(inputList,button) {
 const showInputError = (formElement, inputElement, errorMessage) => {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add('popup__input-error_active');
+  //errorElement.classList.add('popup__input-error_active');
 };
 
 function hideInputError(formElement, inputElement) {
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
-  errorElement.classList.remove('popup__input-error_active');
+  //errorElement.classList.remove('popup__input-error_active');
   errorElement.textContent = '';
 };
 
@@ -196,3 +196,79 @@ function checkPopupInputValidity(formElement, inputElementList) {
     }
   });
 };
+
+
+
+function enableValidation(object) {
+  const formList = document.querySelectorAll(object.formSelector);
+  formList.forEach((form) => {
+    validateForm(form);
+
+    form.addEventListener('input',(evt) => {
+      validateForm(evt.currentTarget);
+      validateInput(evt.currentTarget, evt.target);
+    });
+  });
+}
+
+function validateForm(form) {
+  const inputList = form.querySelectorAll(validationSettings.inputSelector);
+  const buttonSubmit = form.querySelectorAll(validationSettings.submitButtonSelector);
+
+  let isFormValid = !hasInvalidInput(inputList);
+
+  if (isFormValid) {
+    changeButtonState(buttonSubmit, 'disable');
+  } else {
+    changeButtonState(buttonSubmit, 'enable');
+  }
+}
+
+function changeButtonState(buttonElement, action) {
+  switch(action) {
+    case 'enable':
+      buttonElement.disabled = true;
+      break;
+    case 'disable':
+      buttonElement.disabled = false;
+      break;
+    default:
+      console.log('unexpected action in changeButtonState()')
+  }
+}
+
+function validateInput(formElement, inputElement) {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(formElement, inputElement);
+  }
+}
+
+const validationSettings = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__save',
+  //inactiveButtonClass: 'popup__button_disabled',
+  //inputErrorClass: 'popup__input_type_error',
+  //errorClass: 'popup__input-error_visible'
+}
+
+enableValidation(validationSettings);
+
+
+
+/*
+
+
+
+функция свалидироватьПоле(поле) {
+  полеВалидно = проверитьИнпутЛист(поле)
+  если полеВалидно {
+    скрытьОшибкуПоля(поле)
+  } иначе {
+    показатьОшибкуПоля(поле)
+  }
+}
+
+*/
