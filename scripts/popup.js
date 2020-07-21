@@ -11,7 +11,9 @@ export function openPopup(popup) {
 // Универсальное закрытие формы
 export function closePopup() {
   const activePopup = document.querySelector('.popup_opened');
-  activePopup.classList.remove('popup_opened');
+  if (activePopup) {
+    activePopup.classList.remove('popup_opened');
+  }
 
   // Закрытие popup по Escape
   document.removeEventListener('keydown', closePopupByEsc)
