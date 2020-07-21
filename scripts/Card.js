@@ -1,3 +1,5 @@
+import * as popup from './popup.js';
+
 export default class Card {
 	constructor(card, templateSelector) {
 		this._title = card.name;
@@ -34,7 +36,8 @@ export default class Card {
       evt.target.closest('.elements__element').remove();
     });
 
-    this._element.querySelector('.elements__image').addEventListener('click', () => {      this._showImage();
+    this._element.querySelector('.elements__image').addEventListener('click', () => {
+      this._showImage();
     });
   }
 
@@ -44,7 +47,8 @@ export default class Card {
     fullSizeImage.src = this._image;
     fullSizeImage.alt = this._title;
     formShowImage.querySelector('.popup__caption').textContent = this._title;
-    formShowImage.classList.add('popup_opened');
+    document.addEventListener('keydown', popup.closePopupByEsc);
+    popup.openPopup(formShowImage);
   }
 
 }
