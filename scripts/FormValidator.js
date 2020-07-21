@@ -1,5 +1,3 @@
-// Было 80 строк
-
 export default class FormValidator {
   constructor(data, form) {
     this._data = data;
@@ -7,22 +5,21 @@ export default class FormValidator {
   }
 
   enableValidation() {
-    const formList = document.querySelectorAll(this._data.formSelector);
     this._setEventListeners();
-    this._validateForm();
+    this.validateForm();
   }
 
   _setEventListeners() {
     this._form.addEventListener('input',() => {
-      this._validateForm();
+      this.validateForm();
     });
 
     this._form.addEventListener('reset',() => {
-      this._validateForm();
+      this.validateForm();
     });
   }
 
-  _validateForm() {
+  validateForm() {
     const inputList = this._form.querySelectorAll(this._data.inputSelector);
     const buttonSubmit = this._form.querySelector(this._data.submitButtonSelector);
 
@@ -35,7 +32,6 @@ export default class FormValidator {
       this._changeButtonState(buttonSubmit, 'enable');
     }
   }
-
 
   _hasInvalidInput(inputList) {
     return Array.from(inputList).some((inputElement) => {
@@ -57,7 +53,7 @@ export default class FormValidator {
   _validateInputList(formElement, inputList) {
     inputList.forEach(inputElement => {
       this._validateInput(formElement, inputElement);
-    })
+    });
   }
 
   _validateInput(formElement, inputElement) {
@@ -77,7 +73,6 @@ export default class FormValidator {
     const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
     errorElement.textContent = '';
   }
-
 }
 
 
