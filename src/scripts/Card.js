@@ -1,14 +1,13 @@
-import * as popup from './popup.js';
-
 export default class Card {
-	constructor(card, templateSelector) {
-		this._title = card.name;
+  constructor(card, templateSelector, handleCardClick) {
+    this._title = card.name;
     this._image = card.link;
     this._like = false;
-		this._templateSelector = templateSelector;
+    this._templateSelector = templateSelector;
+    this._handleCardClick = handleCardClick;
   }
 
-	_getTemplate() {
+  _getTemplate() {
     const cardElement = document.querySelector(this._templateSelector).content.cloneNode(true);
     return cardElement;
   }
@@ -17,14 +16,11 @@ export default class Card {
     this._element = this._getTemplate();
     this._element.image = this._element.querySelector('.elements__image');
     this._element.caption = this._element.querySelector('.elements__title');
-
-    this._element.caption.textContent  = this._title;
-    this._element.image.src  = this._image;
-    this._element.image.alt  = this._title;
-
+    this._element.caption.textContent = this._title;
+    this._element.image.src = this._image;
+    this._element.image.alt = this._title;
     this._setEventListeners();
-
-  	return this._element;
+    return this._element;
   }
 
   _setEventListeners() {
@@ -37,18 +33,7 @@ export default class Card {
     });
 
     this._element.querySelector('.elements__image').addEventListener('click', () => {
-      this._showImage();
+      this._handleCardClick();
     });
   }
-
-  _showImage() {
-    const formShowImage = document.querySelector('.popup_show-image');
-    const fullSizeImage = formShowImage.querySelector('.popup__image');
-    fullSizeImage.src = this._image;
-    fullSizeImage.alt = this._title;
-    formShowImage.querySelector('.popup__caption').textContent = this._title;
-    document.addEventListener('keydown', popup.closePopupByEsc);
-    popup.openPopup(formShowImage);
-  }
-
 }
