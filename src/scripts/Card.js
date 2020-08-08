@@ -2,7 +2,7 @@ export default class Card {
   constructor(card, templateSelector, handleCardClick) {
     this._title = card.name;
     this._image = card.link;
-    this._like = false;
+    this._isLiked = false;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
   }
@@ -25,6 +25,7 @@ export default class Card {
 
   _setEventListeners() {
     this._element.querySelector('.elements__like').addEventListener('click', function (evt) {
+      this._isLiked = !this._isLiked;
       evt.target.classList.toggle('elements__like_active');
     });
 
@@ -33,7 +34,7 @@ export default class Card {
     });
 
     this._element.querySelector('.elements__image').addEventListener('click', () => {
-      this._handleCardClick();
+      this._handleCardClick(this._image, this._title);
     });
   }
 }

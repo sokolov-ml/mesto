@@ -9,6 +9,7 @@ export default class UserInfo {
   }
 
   setUserInfo({ name, status }) {
+    console.log(this);
     this._name.textContent = name;
     this._status.textContent = status;
   }

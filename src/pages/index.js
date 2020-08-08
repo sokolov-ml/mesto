@@ -8,27 +8,18 @@ import FormValidator from '../scripts/FormValidator.js';
 
 import '../pages/index.css';
 
-//// Настройки валидации
-const validationSettings = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__save',
-};
+//// Переменные и константы:
+// Поля ввода
+const nameInput = document.querySelector('.popup__input_field_name');
+const jobInput = document.querySelector('.popup__input_field_status');
 
-// Включаем валидацию
-document.querySelectorAll('.popup__form').forEach((form) => {
-  const formValidator = new FormValidator(validationSettings, form);
-  formValidator.enableValidation();
-});
+// Кнопки
+const btnProfileEdit = document.querySelector('.profile__edit-btn');
+const btnAddCard = document.querySelector('.profile__add-btn');
 
-// Добавление карточек:
-const popupImage = new PopupWithImage('.popup_show-image');
-popupImage.setEventListeners();
-
-function handleCardClick() {
-  popupImage.open(this._image, this._title);
-}
-
+// Информация о пользователе
+const userInfo = new UserInfo({ selectorUserName: '.profile__name', selectorUserStatus: '.profile__status' });
+//Контейнер карточек:
 const cardsList = new Section(
   {
     items: initialCards,
@@ -40,46 +31,52 @@ const cardsList = new Section(
   '.elements'
 );
 
-cardsList.renderItems();
+// Формы:
+const popupEditProfile = new PopupWithForm('.popup_edit-profile', userInfo.setUserInfo.bind(userInfo));
 
-//// Формы и сабмиты:
-// Попап редактирования профиля:
-const popupEditProfile = new PopupWithForm('.popup_edit-profile', (evt) => {
-  evt.preventDefault();
-  userInfo.setUserInfo({ name: nameInput.value, status: jobInput.value });
-  popupEditProfile.close();
-});
-popupEditProfile.setEventListeners();
-
-// Попап добавления карточки:
-const popupAddCard = new PopupWithForm('.popup_add-card', (evt) => {
-  evt.preventDefault();
-  const input = popupAddCard._getInputValues();
-  const card = new Card({ name: input.location, link: input.image }, '#card-template', handleCardClick);
+const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
+  const card = new Card({ name: inputValues.location, link: inputValues.image }, '#card-template', handleCardClick);
   cardsList.addItem(card.generateCard());
-  popupAddCard.close();
 });
+
+const popupImage = new PopupWithImage('.popup_show-image');
+
+// Настройки валидации
+const validationSettings = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__save',
+};
+
+//// Функции
+function handleCardClick(img, title) {
+  popupImage.open(img, title);
+}
+
+//// Действия
+// Включаем валидацию на всех формах
+document.querySelectorAll('.popup__form').forEach((form) => {
+  const formValidator = new FormValidator(validationSettings, form);
+  formValidator.enableValidation();
+});
+
+// Назначаем слушатели
+popupEditProfile.setEventListeners();
 popupAddCard.setEventListeners();
+popupImage.setEventListeners();
 
-//// Элементы и кнопки:
-const nameInput = document.querySelector('.popup__input_field_name');
-const jobInput = document.querySelector('.popup__input_field_status');
-
-const userInfo = new UserInfo({ selectorUserName: '.profile__name', selectorUserStatus: '.profile__status' });
-
-const btnProfileEdit = document.querySelector('.profile__edit-btn');
 btnProfileEdit.addEventListener('click', function () {
   nameInput.value = userInfo.getUserInfo().name;
   jobInput.value = userInfo.getUserInfo().status;
 
-  // Валидируем форму
   new FormValidator(validationSettings, popupEditProfile._element).validateForm();
-
   popupEditProfile.open();
 });
 
-const btnAddCard = document.querySelector('.profile__add-btn');
 btnAddCard.addEventListener('click', function () {
   new FormValidator(validationSettings, popupAddCard._element).validateForm();
   popupAddCard.open();
 });
+
+//Отрисовываем первые карточки
+cardsList.renderItems();

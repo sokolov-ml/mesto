@@ -7,8 +7,6 @@ export default class PopupWithForm extends Popup {
     this._handleFormSubmit = handleFormSubmit;
   }
 
-  _getInputValues() {}
-
   setEventListeners() {
     this._closeButton.addEventListener('click', () => {
       this.close();
@@ -20,13 +18,17 @@ export default class PopupWithForm extends Popup {
       }
     });
 
-    this._form.addEventListener('submit', this._handleFormSubmit);
+    this._form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      const inputValues = this._getInputValues();
+      this._handleFormSubmit(inputValues);
+      this.close();
+    });
   }
 
   close() {
-    document.removeEventListener('keydown', this._handleEscClose);
+    super.close();
     this._form.reset();
-    this._element.classList.remove('popup_opened');
   }
 
   _getInputValues() {
