@@ -6,7 +6,8 @@ import Section from '../scripts/Section.js';
 import UserInfo from '../scripts/UserInfo.js';
 import FormValidator from '../scripts/FormValidator.js';
 
-import '../pages/index.css';
+import './index.css';
+import '../favicon.ico';
 
 //// Переменные и константы:
 // Поля ввода

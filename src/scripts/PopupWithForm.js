@@ -8,15 +8,7 @@ export default class PopupWithForm extends Popup {
   }
 
   setEventListeners() {
-    this._closeButton.addEventListener('click', () => {
-      this.close();
-    });
-
-    this._element.addEventListener('mousedown', (evt) => {
-      if (evt.target.classList.contains('popup')) {
-        this.close();
-      }
-    });
+    super.setEventListeners();
 
     this._form.addEventListener('submit', (evt) => {
       evt.preventDefault();

@@ -33,6 +33,10 @@ module.exports = {
         loader: 'html-loader',
       },
       {
+        test: /.(ico)$/,
+        loader: 'file-loader?name=./[name].[ext]',
+      },
+      {
         test: /.(png|svg|jpg|gif)$/,
         loader: 'file-loader?name=./images/[name].[ext]',
       },
@@ -45,6 +49,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      favicon: 'src/favicon.ico',
     }),
     new MiniCssExtractPlugin(),
   ],
