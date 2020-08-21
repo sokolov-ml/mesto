@@ -1,3 +1,4 @@
+@import url(./__photo-overlay/profile__photo-overlay.css);
 @import url(./__photo/profile__photo.css);
 @import url(./__info/profile__info.css);
 @import url(./__title/profile__title.css);
@@ -8,9 +9,6 @@
 @import url(./__add-btn/profile__add-btn.css);
 @import url(./__add-img/profile__add-img.css);
 
-
-
-
 .profile {
   max-width: 100%;
   min-height: 120px;
@@ -18,10 +16,8 @@
   margin: 40px 0 50px;
   display: flex;
   align-items: center;
-
-
+  position: relative;
 }
-
 
 @media screen and (max-width: 700px) {
   .profile {
@@ -29,5 +25,4 @@
     justify-content: center;
     margin: 42px 0 36px;
   }
-
 }

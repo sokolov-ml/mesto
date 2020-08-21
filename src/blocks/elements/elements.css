@@ -4,7 +4,9 @@
 
 @import url(./__title/elements__title.css);
 @import url(./__like/elements__like.css);
-@import url(./__like/_active/elements__like_active.css);
+@import url(./__like-button/elements__like-button.css);
+@import url(./__like-button/_active/elements__like-button_active.css);
+@import url(./__like-counter/elements__like-counter.css);
 @import url(./__remove/elements__remove.css);
 
 .elements {
@@ -14,8 +16,6 @@
   gap: 20px 18px;
   grid-template-columns: repeat(auto-fit, 282px);
 
-
   padding: 0;
   list-style-type: none;
-
 }
