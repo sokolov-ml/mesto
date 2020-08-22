@@ -56,9 +56,9 @@ const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
   cardsList.addItem(card.generateCard());
 
   popupAddCard._saveButton.textContent = 'Сохранение...';
-  api
-    .addNewCard(inputValues.location, inputValues.image)
-    .finally(() => (popupAddCard._saveButton.textContent = 'Сохранить'));
+  api.addNewCard(inputValues.location, inputValues.image).finally(() => {
+    popupAddCard._saveButton.textContent = 'Сохранить';
+  });
 });
 
 const popupRemoveCard = new PopupWithForm('.popup_remove-card', (inputValues) => {
@@ -92,15 +92,17 @@ function handleCardLike(evt) {
 function updateUserInfo(obj) {
   popupEditProfile._saveButton.textContent = 'Сохранение...';
   userInfo.setUserInfo.bind(userInfo)(obj);
-  api
-    .updateCurrentUserInfo(obj.name, obj.status)
-    .finally(() => (popupEditProfile._saveButton.textContent = 'Сохранить'));
+  api.updateCurrentUserInfo(obj.name, obj.status).finally(() => {
+    popupEditProfile._saveButton.textContent = 'Сохранить';
+  });
 }
 
 function updateUserPhoto(obj) {
   popupEditPhoto._saveButton.textContent = 'Сохранение...';
   userInfo.setUserPhoto(obj.image);
-  api.updateCurrentUserPhoto(obj.image).finally(() => (popupEditPhoto._saveButton.textContent = 'Сохранить'));
+  api.updateCurrentUserPhoto(obj.image).finally(() => {
+    popupEditPhoto._saveButton.textContent = 'Сохранить';
+  });
 }
 
 //// Действия
