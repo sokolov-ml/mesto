@@ -138,6 +138,9 @@ function updateUserInfo(obj) {
       userInfo.setUserInfo(obj);
       popupEditProfile.close();
     })
+    .catch(() => {
+      console.error('can`t update userinfo');
+    })
     .finally(() => {
       popupEditProfile._saveButton.textContent = 'Сохранить';
     });
@@ -150,6 +153,9 @@ function updateUserPhoto(obj) {
     .then(() => {
       userInfo.setUserPhoto(obj.image);
       popupEditPhoto.close();
+    })
+    .catch(() => {
+      console.error('can`t update userphoto');
     })
     .finally(() => {
       popupEditPhoto._saveButton.textContent = 'Сохранить';
