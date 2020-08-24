@@ -6,6 +6,8 @@ export default class Card {
     this._title = card.name;
     this._image = card.link;
     this._likeCounter = card.likes.length;
+    // Можно лучше:
+    // Воспользоваться !card.some(like => predicate) для этой цели
     this._isLikedByMe = !!card.likes.find((item) => item._id === currentUserId);
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;

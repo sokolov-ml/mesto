@@ -15,6 +15,8 @@ export default class PopupWithForm extends Popup {
       evt.preventDefault();
       const inputValues = this._getInputValues();
       this._handleFormSubmit(inputValues);
+      // Надо исправить:
+      // Попап должен закрываться только после отработки запроса (промисы)
       this.close();
     });
   }

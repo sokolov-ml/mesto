@@ -45,6 +45,9 @@ const popupEditProfile = new PopupWithForm('.popup_edit-profile', updateUserInfo
 const popupEditPhoto = new PopupWithForm('.popup_update-photo', updateUserPhoto);
 
 const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
+  // Надо исправить:
+  // Код создания карточки дублируется ниже. Вынесите это в отдельную функцию,
+  // в идеале передавая только данные карточки, а возвращая - `generateCard()`
   const card = new Card(
     { name: inputValues.location, link: inputValues.image, owner: { _id: userInfo.id }, likes: [] },
     '#card-template',
@@ -53,6 +56,12 @@ const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
     handleCardRemove,
     handleCardLike
   );
+  // Надо исправить:
+  // 1. Рендер карточки должен происходить после успешного запроса, 
+  // внутри промиса (.then()). Вы это уже реализовывали для других запросов,
+  // которые находятся в самом низу этого файла.
+  // 2. Необходимо отлавливать ошибки запросов с помощью .catch()
+  // Вы это уже также делали в самом низу.
   cardsList.addItem(card.generateCard());
 
   popupAddCard._saveButton.textContent = 'Сохранение...';
@@ -62,6 +71,8 @@ const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
 });
 
 const popupRemoveCard = new PopupWithForm('.popup_remove-card', (inputValues) => {
+  // Надо исправить:
+  // См. строку 59
   activeCard.removeCard();
   api.removeCard(activeCard.getId());
 });
@@ -86,11 +97,23 @@ function handleCardRemove(evt) {
 }
 
 function handleCardLike(evt) {
+  // Надо исправить:
+  // 1. Нету обработки ошибок: `.catch()`
+  // 2. Лайк в Card ставится до ответа сервера, поэтому нужно
+  // а) Возвращать здесь промис и обрабатывать его в Card с помощью `.then()`
+  // б) Прямо здесь в `.then()` вызывать метод карточки `like`, который меняет
+  // состояние лайка в DOM.
+  // 
+  // Рекомендую вариант "б", т.к он более гибкий.
   api.setLikeCard(this._id, this._isLikedByMe);
 }
 
 function updateUserInfo(obj) {
   popupEditProfile._saveButton.textContent = 'Сохранение...';
+  // Надо исправить: 
+  // См. строку 59
+  // Можно лучше:
+  // Для чего здесь нужен .bind()?
   userInfo.setUserInfo.bind(userInfo)(obj);
   api.updateCurrentUserInfo(obj.name, obj.status).finally(() => {
     popupEditProfile._saveButton.textContent = 'Сохранить';
@@ -99,6 +122,8 @@ function updateUserInfo(obj) {
 
 function updateUserPhoto(obj) {
   popupEditPhoto._saveButton.textContent = 'Сохранение...';
+  // Надо исправить:
+  // см. строку 59
   userInfo.setUserPhoto(obj.image);
   api.updateCurrentUserPhoto(obj.image).finally(() => {
     popupEditPhoto._saveButton.textContent = 'Сохранить';
@@ -139,6 +164,8 @@ btnAddCard.addEventListener('click', function () {
 });
 
 //Получаем информацию о пользователе
+// Можно лучше:
+// Использовать Promise.all() для получения карточек и информации о пользователе.
 api
   .getCurrentUserInfo()
   .then((result) => {
@@ -161,6 +188,8 @@ api
       {
         items: result.reverse(),
         renderer: (item) => {
+          // Надо исправить:
+          // См. строку 48
           const card = new Card(item, '#card-template', handleCardClick, userInfo.id, handleCardRemove, handleCardLike);
           cardsList.addItem(card.generateCard());
         },
@@ -172,3 +201,18 @@ api
   .catch(() => {
     console.log('can`t get cards');
   });
+
+/**
+ * Здравствуйте, Михаил!
+ * 
+ * Прошу прощения, что не досмотрел ошибки на предыдущих итерациях.
+ * Ваша работа все еще замечательная, нужно доработать лишь несколько моментов, 
+ * касающихся запросов и дублирования кода.
+ *
+ * Комментарии имеют формат "Надо исправить:", "Можно лучше:"
+ *
+ * ***
+ *
+ * Надеюсь на понимание,
+ * желаю успехов.
+ */
