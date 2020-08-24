@@ -27,10 +27,6 @@ export default class Api {
     return this._fetch(this._path.user);
   }
 
-  getCards() {
-    return this._fetch(this._path.cards);
-  }
-
   updateCurrentUserInfo(newName, newAbout) {
     return this._fetch(this._path.user, 'PATCH', {
       name: newName,
@@ -44,6 +40,10 @@ export default class Api {
     });
   }
 
+  getCards() {
+    return this._fetch(this._path.cards);
+  }
+
   addNewCard(name, link) {
     return this._fetch(this._path.cards, 'POST', {
       name: name,
@@ -55,11 +55,11 @@ export default class Api {
     return this._fetch(`${this._path.cards}/${cardId}`, 'DELETE');
   }
 
-  setLikeCard(cardId) {
+  setLikeCardOn(cardId) {
     return this._fetch(`${this._path.cards}/likes/${cardId}`, 'PUT');
   }
 
-  unsetLikeCard(cardId) {
+  setLikeCardOff(cardId) {
     return this._fetch(`${this._path.cards}/likes/${cardId}`, 'DELETE');
   }
 }

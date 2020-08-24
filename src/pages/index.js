@@ -26,6 +26,7 @@ const jobInput = document.querySelector('.popup__input_field_status');
 // Кнопки
 const btnProfileEdit = document.querySelector('.profile__edit-btn');
 const btnAddCard = document.querySelector('.profile__add-btn');
+
 //Фото профиля
 const imgProfilePhoto = document.querySelector('.profile__photo-overlay');
 
@@ -45,126 +46,144 @@ const popupEditProfile = new PopupWithForm('.popup_edit-profile', updateUserInfo
 const popupEditPhoto = new PopupWithForm('.popup_update-photo', updateUserPhoto);
 
 const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
-  // Надо исправить:
-  // Код создания карточки дублируется ниже. Вынесите это в отдельную функцию,
-  // в идеале передавая только данные карточки, а возвращая - `generateCard()`
-  const card = new Card(
-    { name: inputValues.location, link: inputValues.image, owner: { _id: userInfo.id }, likes: [] },
-    '#card-template',
-    handleCardClick,
-    userInfo.id,
-    handleCardRemove,
-    handleCardLike
-  );
-  // Надо исправить:
-  // 1. Рендер карточки должен происходить после успешного запроса,
-  // внутри промиса (.then()). Вы это уже реализовывали для других запросов,
-  // которые находятся в самом низу этого файла.
-  // 2. Необходимо отлавливать ошибки запросов с помощью .catch()
-  // Вы это уже также делали в самом низу.
-  cardsList.addItem(card.generateCard());
-
   popupAddCard._saveButton.textContent = 'Сохранение...';
-  api.addNewCard(inputValues.location, inputValues.image).finally(() => {
-    popupAddCard._saveButton.textContent = 'Сохранить';
-  });
+  api
+    .addNewCard(inputValues.location, inputValues.image)
+    .then((response) => {
+      cardsList.addItem(createNewCard(response));
+      popupAddCard.close();
+    })
+    .catch(() => {
+      console.error('can`t add cards');
+    })
+    .finally(() => {
+      popupAddCard._saveButton.textContent = 'Сохранить';
+    });
 });
 
 const popupRemoveCard = new PopupWithForm('.popup_remove-card', (inputValues) => {
-  // Надо исправить:
-  // См. строку 59
-  activeCard.removeCard();
-  api.removeCard(activeCard.getId());
+  popupRemoveCard._saveButton.textContent = 'Удаление...';
+  api
+    .removeCard(activeCard.getId())
+    .then(() => {
+      activeCard.removeCard();
+      popupRemoveCard.close();
+    })
+    .catch(() => {
+      console.error('can`t delete cards');
+    })
+    .finally(() => {
+      popupRemoveCard._saveButton.textContent = 'Да';
+    });
 });
 
 const popupCardImage = new PopupWithImage('.popup_show-image');
 
 // Настройки валидации
+
 const validationSettings = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__save',
 };
 
+const validators = {};
+validators.popupEditProfile = new FormValidator(validationSettings, popupEditProfile.form);
+validators.popupEditPhoto = new FormValidator(validationSettings, popupEditPhoto.form);
+validators.popupAddCard = new FormValidator(validationSettings, popupAddCard.form);
+validators.popupRemoveCard = new FormValidator(validationSettings, popupRemoveCard.form);
+
 //// Функции
+function createNewCard(data) {
+  const card = new Card(data, '#card-template', handleCardClick, userInfo.id, handleCardRemove, handleCardLike);
+  return card.generateCard();
+}
+
 function handleCardClick(img, title) {
   popupCardImage.open(img, title);
 }
 
-function handleCardRemove(evt) {
+function handleCardRemove() {
   activeCard = this;
   popupRemoveCard.open();
 }
 
-function handleCardLike(evt) {
-  // Надо исправить:
-  // 1. Нету обработки ошибок: `.catch()`
-  // 2. Лайк в Card ставится до ответа сервера, поэтому нужно
-  // а) Возвращать здесь промис и обрабатывать его в Card с помощью `.then()`
-  // б) Прямо здесь в `.then()` вызывать метод карточки `like`, который меняет
-  // состояние лайка в DOM.
-  //
-  // Рекомендую вариант "б", т.к он более гибкий.
-  api.setLikeCard(this._id, this._isLikedByMe);
-  if (this._isLikedByMe) {
-    api.setLikeCard(this._id);
+function handleCardLike() {
+  if (this._isAlreadyLiked) {
+    api
+      .setLikeCardOff(this.getId())
+      .then((response) => {
+        this.toggleLike(response, userInfo.id);
+      })
+      .catch(() => {
+        console.error('can`t set like');
+      });
   } else {
-    api.unsetLikeCard(this._id);
+    api
+      .setLikeCardOn(this.getId())
+      .then((response) => {
+        this.toggleLike(response, userInfo.id);
+      })
+      .catch(() => {
+        console.error('can`t set like');
+      });
   }
 }
 
 function updateUserInfo(obj) {
   popupEditProfile._saveButton.textContent = 'Сохранение...';
-  // Надо исправить:
-  // См. строку 59
-  // Можно лучше:
-  // Для чего здесь нужен .bind()?
-  userInfo.setUserInfo.bind(userInfo)(obj);
-  api.updateCurrentUserInfo(obj.name, obj.status).finally(() => {
-    popupEditProfile._saveButton.textContent = 'Сохранить';
-  });
+  api
+    .updateCurrentUserInfo(obj.name, obj.status)
+    .then(() => {
+      userInfo.setUserInfo(obj);
+      popupEditProfile.close();
+    })
+    .finally(() => {
+      popupEditProfile._saveButton.textContent = 'Сохранить';
+    });
 }
 
 function updateUserPhoto(obj) {
   popupEditPhoto._saveButton.textContent = 'Сохранение...';
-  // Надо исправить:
-  // см. строку 59
-  userInfo.setUserPhoto(obj.image);
-  api.updateCurrentUserPhoto(obj.image).finally(() => {
-    popupEditPhoto._saveButton.textContent = 'Сохранить';
-  });
+  api
+    .updateCurrentUserPhoto(obj.image)
+    .then(() => {
+      userInfo.setUserPhoto(obj.image);
+      popupEditPhoto.close();
+    })
+    .finally(() => {
+      popupEditPhoto._saveButton.textContent = 'Сохранить';
+    });
 }
 
 //// Действия
 // Включаем валидацию на всех формах
-document.querySelectorAll('.popup__form').forEach((form) => {
-  const formValidator = new FormValidator(validationSettings, form);
-  formValidator.enableValidation();
-});
+validators.popupEditProfile.enableValidation();
+validators.popupEditPhoto.enableValidation();
+validators.popupAddCard.enableValidation();
+validators.popupRemoveCard.enableValidation();
 
 // Назначаем слушатели
 popupEditProfile.setEventListeners();
 popupEditPhoto.setEventListeners();
-
 popupAddCard.setEventListeners();
 popupRemoveCard.setEventListeners();
 popupCardImage.setEventListeners();
 
 imgProfilePhoto.addEventListener('click', () => {
-  new FormValidator(validationSettings, popupEditPhoto._element).validateForm();
+  validators.popupEditPhoto.validateForm();
   popupEditPhoto.open();
 });
 
 btnProfileEdit.addEventListener('click', function () {
   nameInput.value = userInfo.getUserInfo().name;
   jobInput.value = userInfo.getUserInfo().status;
-
-  new FormValidator(validationSettings, popupEditProfile._element).validateForm();
+  validators.popupEditProfile.validateForm();
   popupEditProfile.open();
 });
 
 btnAddCard.addEventListener('click', function () {
-  new FormValidator(validationSettings, popupAddCard._element).validateForm();
+  validators.popupAddCard.validateForm();
   popupAddCard.open();
 });
 
@@ -193,10 +212,7 @@ api
       {
         items: result.reverse(),
         renderer: (item) => {
-          // Надо исправить:
-          // См. строку 48
-          const card = new Card(item, '#card-template', handleCardClick, userInfo.id, handleCardRemove, handleCardLike);
-          cardsList.addItem(card.generateCard());
+          cardsList.addItem(createNewCard(item));
         },
       },
       '.elements'
@@ -206,18 +222,3 @@ api
   .catch(() => {
     console.error('can`t get cards');
   });
-
-/**
- * Здравствуйте, Михаил!
- *
- * Прошу прощения, что не досмотрел ошибки на предыдущих итерациях.
- * Ваша работа все еще замечательная, нужно доработать лишь несколько моментов,
- * касающихся запросов и дублирования кода.
- *
- * Комментарии имеют формат "Надо исправить:", "Можно лучше:"
- *
- * ***
- *
- * Надеюсь на понимание,
- * желаю успехов.
- */
