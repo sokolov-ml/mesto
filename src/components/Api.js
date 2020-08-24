@@ -55,7 +55,11 @@ export default class Api {
     return this._fetch(`${this._path.cards}/${cardId}`, 'DELETE');
   }
 
-  setLikeCard(cardId, active) {
-    return this._fetch(`${this._path.cards}/likes/${cardId}`, active ? 'PUT' : 'DELETE');
+  setLikeCard(cardId) {
+    return this._fetch(`${this._path.cards}/likes/${cardId}`, 'PUT');
+  }
+
+  unsetLikeCard(cardId) {
+    return this._fetch(`${this._path.cards}/likes/${cardId}`, 'DELETE');
   }
 }
