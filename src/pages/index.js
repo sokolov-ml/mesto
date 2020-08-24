@@ -86,7 +86,11 @@ function handleCardRemove(evt) {
 }
 
 function handleCardLike(evt) {
-  api.setLikeCard(this._id, this._isLikedByMe);
+  if (this._isLikedByMe) {
+    api.setLikeCard(this._id);
+  } else {
+    api.unsetLikeCard(this._id);
+  }
 }
 
 function updateUserInfo(obj) {
@@ -150,7 +154,7 @@ api
     userInfo.setUserPhoto(result.avatar);
   })
   .catch(() => {
-    console.log('can`t get userInfo');
+    console.error('can`t get userInfo');
   });
 
 //Отрисовываем первые карточки
@@ -170,5 +174,5 @@ api
     cardsList.renderItems();
   })
   .catch(() => {
-    console.log('can`t get cards');
+    console.error('can`t get cards');
   });
