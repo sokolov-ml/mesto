@@ -5,17 +5,22 @@ export default class UserInfo {
     this._photo = document.querySelector(selectorUserPhoto);
   }
 
+  getId() {
+    return this._data._id;
+  }
+
   getUserInfo() {
-    return { name: this._name.textContent, status: this._status.textContent, photo: this._photo };
+    return this._data;
   }
 
-  setUserInfo({ name, status, id }) {
-    this._name.textContent = name;
-    this._status.textContent = status;
-    this.id = id;
+  setUserInfo(data) {
+    this._data = data;
+    this._name.textContent = this._data.name;
+    this._status.textContent = this._data.about;
   }
 
-  setUserPhoto(newImageUrl) {
-    this._photo.src = newImageUrl;
+  setUserPhoto(data) {
+    this._data = data;
+    this._photo.src = this._data.avatar;
   }
 }

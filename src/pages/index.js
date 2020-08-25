@@ -19,10 +19,6 @@ const api = new Api({
   },
 });
 
-// Поля ввода
-const nameInput = document.querySelector('.popup__input_field_name');
-const jobInput = document.querySelector('.popup__input_field_status');
-
 // Кнопки
 const btnProfileEdit = document.querySelector('.profile__edit-btn');
 const btnAddCard = document.querySelector('.profile__add-btn');
@@ -36,14 +32,15 @@ const userInfo = new UserInfo({
   selectorUserStatus: '.profile__status',
   selectorUserPhoto: '.profile__photo',
 });
-let cardsList;
 
+// Карточки
+let cardsList;
 let activeCard;
 
 // Формы:
 const popupEditProfile = new PopupWithForm('.popup_edit-profile', updateUserInfo);
 
-const popupEditPhoto = new PopupWithForm('.popup_update-photo', updateUserPhoto);
+const popupEditPhoto = new PopupWithForm('.popup_update-avatar', updateUserPhoto);
 
 const popupAddCard = new PopupWithForm('.popup_add-card', (inputValues) => {
   popupAddCard._saveButton.textContent = 'Сохранение...';
@@ -94,8 +91,40 @@ validators.popupAddCard = new FormValidator(validationSettings, popupAddCard.for
 validators.popupRemoveCard = new FormValidator(validationSettings, popupRemoveCard.form);
 
 //// Функции
+function initUserInfo() {
+  api
+    .getCurrentUserInfo()
+    .then((result) => {
+      userInfo.setUserInfo(result);
+      userInfo.setUserPhoto(result);
+    })
+    .catch(() => {
+      console.error('can`t get userInfo');
+    });
+}
+
+function initCards() {
+  api
+    .getCards()
+    .then((result) => {
+      cardsList = new Section(
+        {
+          items: result.reverse(),
+          renderer: (item) => {
+            cardsList.addItem(createNewCard(item));
+          },
+        },
+        '.elements'
+      );
+      cardsList.renderItems();
+    })
+    .catch(() => {
+      console.error('can`t get cards');
+    });
+}
+
 function createNewCard(data) {
-  const card = new Card(data, '#card-template', handleCardClick, userInfo.id, handleCardRemove, handleCardLike);
+  const card = new Card(data, '#card-template', handleCardClick, userInfo.getId(), handleCardRemove, handleCardLike);
   return card.generateCard();
 }
 
@@ -113,7 +142,7 @@ function handleCardLike() {
     api
       .setLikeCardOff(this.getId())
       .then((response) => {
-        this.toggleLike(response, userInfo.id);
+        this.toggleLike(response, userInfo.getId());
       })
       .catch(() => {
         console.error('can`t set like');
@@ -122,7 +151,7 @@ function handleCardLike() {
     api
       .setLikeCardOn(this.getId())
       .then((response) => {
-        this.toggleLike(response, userInfo.id);
+        this.toggleLike(response, userInfo.getId());
       })
       .catch(() => {
         console.error('can`t set like');
@@ -133,9 +162,9 @@ function handleCardLike() {
 function updateUserInfo(obj) {
   popupEditProfile._saveButton.textContent = 'Сохранение...';
   api
-    .updateCurrentUserInfo(obj.name, obj.status)
-    .then(() => {
-      userInfo.setUserInfo(obj);
+    .updateCurrentUserInfo(obj.name, obj.about)
+    .then((response) => {
+      userInfo.setUserInfo(response);
       popupEditProfile.close();
     })
     .catch(() => {
@@ -149,9 +178,9 @@ function updateUserInfo(obj) {
 function updateUserPhoto(obj) {
   popupEditPhoto._saveButton.textContent = 'Сохранение...';
   api
-    .updateCurrentUserPhoto(obj.image)
-    .then(() => {
-      userInfo.setUserPhoto(obj.image);
+    .updateCurrentUserPhoto(obj.avatar)
+    .then((response) => {
+      userInfo.setUserPhoto(response);
       popupEditPhoto.close();
     })
     .catch(() => {
@@ -177,13 +206,13 @@ popupRemoveCard.setEventListeners();
 popupCardImage.setEventListeners();
 
 imgProfilePhoto.addEventListener('click', () => {
+  popupEditPhoto.setInputValues(userInfo.getUserInfo());
   validators.popupEditPhoto.validateForm();
   popupEditPhoto.open();
 });
 
 btnProfileEdit.addEventListener('click', function () {
-  nameInput.value = userInfo.getUserInfo().name;
-  jobInput.value = userInfo.getUserInfo().status;
+  popupEditProfile.setInputValues(userInfo.getUserInfo());
   validators.popupEditProfile.validateForm();
   popupEditProfile.open();
 });
@@ -193,38 +222,5 @@ btnAddCard.addEventListener('click', function () {
   popupAddCard.open();
 });
 
-//Получаем информацию о пользователе
-// Можно лучше:
-// Использовать Promise.all() для получения карточек и информации о пользователе.
-api
-  .getCurrentUserInfo()
-  .then((result) => {
-    userInfo.setUserInfo({
-      name: result.name,
-      status: result.about,
-      id: result._id,
-    });
-    userInfo.setUserPhoto(result.avatar);
-  })
-  .catch(() => {
-    console.error('can`t get userInfo');
-  });
-
-//Отрисовываем первые карточки
-api
-  .getCards()
-  .then((result) => {
-    cardsList = new Section(
-      {
-        items: result.reverse(),
-        renderer: (item) => {
-          cardsList.addItem(createNewCard(item));
-        },
-      },
-      '.elements'
-    );
-    cardsList.renderItems();
-  })
-  .catch(() => {
-    console.error('can`t get cards');
-  });
+initUserInfo();
+initCards();

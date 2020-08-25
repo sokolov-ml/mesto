@@ -69,7 +69,6 @@ export default class Card {
 
   _setEventListeners() {
     this._element.likeButton.addEventListener('click', () => {
-      // this.like();
       this._handleCardLike();
     });
 
@@ -78,7 +77,7 @@ export default class Card {
     });
 
     this._element.querySelector('.elements__image').addEventListener('click', () => {
-      this._handleCardClick(this._image, this._title);
+      this._handleCardClick(this._data.link, this._data.name);
     });
   }
 }
